@@ -13,7 +13,7 @@ S_DIR   = source
 S_MPI   = source/mpi
 OUTPUT  = bin
 
-MPI_DIR     = /usr/local/Cellar/open-mpi/1.10.2
+MPI_DIR    ?= /usr/local/Cellar/open-mpi/1.10.2
 MPI_INCLUDE = $(MPI_DIR)/include
 MPI_LIB     = $(MPI_DIR)/lib
 
