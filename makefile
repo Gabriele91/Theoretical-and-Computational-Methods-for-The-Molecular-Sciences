@@ -13,9 +13,9 @@ S_DIR   = source
 S_MPI   = source/mpi
 OUTPUT  = bin
 
-MPI_DIR		= /usr/local/Cellar/open-mpi/1.10.2
+MPI_DIR     = /usr/local/Cellar/open-mpi/1.10.2
 MPI_INCLUDE = $(MPI_DIR)/include
-MPI_LIB		= $(MPI_DIR)/lib
+MPI_LIB     = $(MPI_DIR)/lib
 
 C_FLAGS   = -I$(I_MPI) -I$(I_DIR) -I$(MPI_INCLUDE) -DUSE_${PRECISION} -O3 
 CPP_FLAGS = -std=c++11
