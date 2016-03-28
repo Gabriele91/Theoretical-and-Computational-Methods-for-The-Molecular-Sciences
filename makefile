@@ -5,8 +5,12 @@ ARCH     ?= x86_64
 CPP 	  = $(COMPILER) -arch $(ARCH)
 MKDIR_P   = mkdir -p
 
-O_DIR   = build/makefile
-O_MPI   = build/makefile/mpi
+PRECISION_LOW := $(shell echo $(PRECISION)     | tr "[:upper:]" "[:lower:]")
+PRECISION_LOW := $(shell echo $(PRECISION_LOW) | tr "_" "-")
+
+O_BASE  = build/makefile
+O_DIR   = $(O_BASE)-$(PRECISION_LOW)-$(ARCH)
+O_MPI   = $(O_BASE)-$(PRECISION_LOW)-$(ARCH)/mpi
 I_DIR   = include
 I_MPI   = include/mpi
 S_DIR   = source
@@ -35,13 +39,13 @@ MPI_OBJ_FILES := $(addprefix $(O_MPI)/,$(notdir $(MPI_CPP_FILES:.cpp=.o)))
 
 
 serial: directories $(SERIAL_OBJ_FILES) $(MPI_OBJ_FILES)
-	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/serial $(SERIAL_OBJ_FILES) $(MPI_OBJ_FILES)
+	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/serial-$(PRECISION_LOW) $(SERIAL_OBJ_FILES) $(MPI_OBJ_FILES)
 
 slb: directories $(SLB_OBJ_FILES) $(MPI_OBJ_FILES)
-	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/slb $(SLB_OBJ_FILES) $(MPI_OBJ_FILES)
+	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/slb-$(PRECISION_LOW) $(SLB_OBJ_FILES) $(MPI_OBJ_FILES)
 
 dlb: directories $(DLB_OBJ_FILES) $(MPI_OBJ_FILES)
-	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/dlb $(DLB_OBJ_FILES) $(MPI_OBJ_FILES)
+	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/dlb-$(PRECISION_LOW) $(DLB_OBJ_FILES) $(MPI_OBJ_FILES)
 
 directories: ${O_DIR} ${O_MPI} ${OUTPUT}
 
@@ -61,7 +65,4 @@ $(O_MPI)/%.o: $(S_MPI)/%.cpp
 	$(CPP) $(C_FLAGS) $(CPP_FLAGS) -c $< -o $@ 
 
 clean:
-	rm -f $(O_DIR)/*.o
-	rm -f $(O_MPI)/*.o
-	rm -R $(O_MPI)
-	rm -R $(O_DIR)
+	rm -R $(O_BASE)*
