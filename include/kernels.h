@@ -109,7 +109,7 @@ namespace kernels
     
     /// halley: ( f(x)*f'(x) ) / ( (f'(x)^2) - ( (f''(x)^2)/4 ) )
     template< class T >
-    inline std::complex<T> halley(const polynomial< T >& constants, const std::complex< T >& x)
+    inline std::complex< T > halley(const polynomial< T >& constants, const std::complex< T >& x)
     {
         
         //exit condiction
@@ -143,7 +143,7 @@ namespace kernels
     
     ///  halley 4
     template< class T >
-    inline std::complex<T> halley4(const polynomial< T >& constants,const std::complex<T>& x)
+    inline std::complex< T > halley4(const polynomial< T >& constants,const std::complex< T >& x)
     {
         
         //exit condiction
@@ -176,7 +176,7 @@ namespace kernels
         //halley4
         auto wn2=wn*wn;
         auto s=(vn*wn2)-(vn*vn*un);
-        auto d=((vn*vn)*yn)+(wn2*wn)-(2.0*vn*wn*un);
+        auto d=((vn*vn)*yn)+(wn2*wn)-((T)(2.0L)*vn*wn*un);
         
         //
         return x-(s/d);

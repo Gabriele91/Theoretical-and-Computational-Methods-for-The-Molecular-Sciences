@@ -37,6 +37,7 @@ DLB_OBJ_FILES := $(addprefix $(O_DIR)/,$(notdir $(DLB_CPP_FILES:.cpp=.o)))
 MPI_CPP_FILES := $(wildcard $(S_MPI)/*.cpp)
 MPI_OBJ_FILES := $(addprefix $(O_MPI)/,$(notdir $(MPI_CPP_FILES:.cpp=.o)))
 
+all: serial slb dlb
 
 serial: directories $(SERIAL_OBJ_FILES) $(MPI_OBJ_FILES)
 	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/serial-$(PRECISION_LOW) $(SERIAL_OBJ_FILES) $(MPI_OBJ_FILES)
