@@ -151,7 +151,7 @@ inline bool master(const argv_parameters&   l_params,
         if(worker_id!=0) world.i_send((void*)&v_init[worker_id],  (int)1, mpi_init_type, worker_id, TAG_INIT, send_queue);
     }
     //init
-    matrix_t matrix(v_init[0]);
+    matrix_t l_matrix(v_init[0]);
     //kernel
     kernel_t l_kernel = kernels::get_kernel_from_id< value_t >(l_kernel_id);
     //succession
@@ -165,7 +165,7 @@ inline bool master(const argv_parameters&   l_params,
         l_rgbs
     };
     //applay
-    matrix.applay(context, l_params.m_zoom);
+    l_matrix.applay(context, l_params.m_zoom);
     //wait the other workers
     send_queue.wait();
     //init global matrix
@@ -175,7 +175,7 @@ inline bool master(const argv_parameters&   l_params,
         { width,        height  }
     });
     //get from master
-    assert(g_matrix.get_from(0, 0, matrix));
+    assert(g_matrix.get_from(0, 0, l_matrix));
     //count result
     size_t n_result = v_init.size() - 1;
     //wait the results
@@ -206,8 +206,8 @@ inline bool master(const argv_parameters&   l_params,
                       << v_init[worker_id].m_size[1]
                       << std::endl;
             #endif
-            //init local matrix
-            matrix_t l_matrix(v_init[worker_id]);
+            //reinit local matrix
+            l_matrix = matrix_t(v_init[worker_id]);
             //get
             world.i_recv_lock((void*)l_matrix.get_raw_data(), (int)l_matrix.get_raw_size(), mpi_rgb_type, worker_id, TAG_MATRIX);
             //applay
