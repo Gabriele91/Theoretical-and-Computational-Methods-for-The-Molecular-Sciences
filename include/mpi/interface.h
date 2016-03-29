@@ -19,6 +19,20 @@ namespace mpi_interface
     
     double worker_tick();
     double worker_time();
+    //class time
+    class timer
+    {
+    public:
+        
+        void reset();
+        double time_elapsed() const;
+    
+    protected:
+        
+        //attributes
+        double m_start{ worker_time() };
+
+    };
     //class declaretion
     class mpi_comm;
     class mpi_status;

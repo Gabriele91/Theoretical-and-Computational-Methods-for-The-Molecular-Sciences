@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0043B5C1CAB0BAF00E90994 /* interface_timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0043B5B1CAB0BAF00E90994 /* interface_timer.cpp */; };
+		E0043B5D1CAB0BAF00E90994 /* interface_timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0043B5B1CAB0BAF00E90994 /* interface_timer.cpp */; };
+		E0043B5E1CAB0BAF00E90994 /* interface_timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0043B5B1CAB0BAF00E90994 /* interface_timer.cpp */; };
 		E0BC1AAF1CA955E000089B9D /* interface_async_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0D87EFE1CA7D2E8001FC56D /* interface_async_queue.cpp */; };
 		E0BC1AB01CA955E000089B9D /* interface_comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0D87EFF1CA7D2E8001FC56D /* interface_comm.cpp */; };
 		E0BC1AB11CA955E000089B9D /* main-serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0D87EFB1CA7D2E8001FC56D /* main-serial.cpp */; };
@@ -61,6 +64,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E0043B5B1CAB0BAF00E90994 /* interface_timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_timer.cpp; sourceTree = "<group>"; };
+		E0043B5F1CAB0CBA00E90994 /* output_help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = output_help.h; sourceTree = "<group>"; };
 		E05601E81C94238E00907164 /* MPI-SLB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "MPI-SLB"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BC1AAA1CA920FD00089B9D /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		E0BC1AAB1CA932AA00089B9D /* argv_parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = argv_parser.h; sourceTree = "<group>"; };
@@ -150,6 +155,7 @@
 				E0D87EFF1CA7D2E8001FC56D /* interface_comm.cpp */,
 				E0D87F001CA7D2E8001FC56D /* interface_request.cpp */,
 				E0D87F011CA7D2E8001FC56D /* interface_status.cpp */,
+				E0043B5B1CAB0BAF00E90994 /* interface_timer.cpp */,
 			);
 			path = mpi;
 			sourceTree = "<group>";
@@ -168,6 +174,7 @@
 				E0BC1AAA1CA920FD00089B9D /* parser.h */,
 				E0BC1AAB1CA932AA00089B9D /* argv_parser.h */,
 				E0BC1AAC1CA9333500089B9D /* config.h */,
+				E0043B5F1CAB0CBA00E90994 /* output_help.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -277,6 +284,7 @@
 				E0D87F0B1CA7D2E8001FC56D /* interface_status.cpp in Sources */,
 				E0BC1ACD1CA956F000089B9D /* main-slb.cpp in Sources */,
 				E0D87F071CA7D2E8001FC56D /* interface.cpp in Sources */,
+				E0043B5D1CAB0BAF00E90994 /* interface_timer.cpp in Sources */,
 				E0D87F0A1CA7D2E8001FC56D /* interface_request.cpp in Sources */,
 				E0D87F111CA7F41F001FC56D /* complexmath.cpp in Sources */,
 			);
@@ -291,6 +299,7 @@
 				E0BC1AB11CA955E000089B9D /* main-serial.cpp in Sources */,
 				E0BC1AB21CA955E000089B9D /* interface_status.cpp in Sources */,
 				E0BC1AB31CA955E000089B9D /* interface.cpp in Sources */,
+				E0043B5C1CAB0BAF00E90994 /* interface_timer.cpp in Sources */,
 				E0BC1AB41CA955E000089B9D /* interface_request.cpp in Sources */,
 				E0BC1AB51CA955E000089B9D /* complexmath.cpp in Sources */,
 			);
@@ -305,6 +314,7 @@
 				E0BC1AC11CA955F500089B9D /* interface_status.cpp in Sources */,
 				E0BC1AC21CA955F500089B9D /* interface.cpp in Sources */,
 				E0BC1AC31CA955F500089B9D /* interface_request.cpp in Sources */,
+				E0043B5E1CAB0BAF00E90994 /* interface_timer.cpp in Sources */,
 				E0BC1AD01CA9571B00089B9D /* main-dlb.cpp in Sources */,
 				E0BC1AC41CA955F500089B9D /* complexmath.cpp in Sources */,
 			);

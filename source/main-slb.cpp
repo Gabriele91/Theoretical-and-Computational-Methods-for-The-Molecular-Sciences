@@ -18,6 +18,7 @@
 #include <succession.h>
 #include <parser.h>
 #include <argv_parser.h>
+#include <output_help.h>
 #include <mpi/interface.h>
 
 
@@ -78,29 +79,6 @@ mpi::mpi_handle build_init_t()
     return handle;
 }
 
-template < class T >
-inline std::string build_string_output(const argv_parameters& l_params,
-                                       const polynomial< T >& l_polynomial)
-{
-    std::string
-    output = std::to_string(l_params.m_mxn[0]);
-    output+= "x";
-    output+= std::to_string(l_params.m_mxn[0]);
-    output+= "x";
-    output+= std::to_string(l_polynomial.size());
-    output+= "x";
-    output+= std::to_string(l_params.m_iteration);
-    output+= "x";
-    output+= std::to_string(l_params.m_zoom);
-    output+= ".";
-    output+= type_t_point_str;
-    output+= ".";
-    output+= l_params.m_kernel;
-    output+= ".tga";
-    
-    return output;
-}
-
 
 inline bool master(const argv_parameters&   l_params,
                    const polynomial_t&      l_polynomial,
@@ -123,6 +101,8 @@ inline bool master(const argv_parameters&   l_params,
     mpi::mpi_async_queue send_queue;
     //init size
     std::vector< init_t > v_init(group_x*group_y);
+    //get time
+    mpi::timer  l_timer;
     //send job to all
     for(size_t x=0; x!=group_x; ++x)
     for(size_t y=0; y!=group_y; ++y)
@@ -136,17 +116,15 @@ inline bool master(const argv_parameters&   l_params,
         if(x==group_x-1)  this_width  += width%local_width;
         if(y==group_y-1)  this_height += height%local_height;
         //compute init
-        v_init[worker_id]=init_t
-        {
-            {
-                ((value_t)(local_width* (x)) - ((value_t)width/(value_t)2.0L) )*l_params.m_zoom,
-                ((value_t)(local_height*(y)) - ((value_t)height/(value_t)2.0L))*l_params.m_zoom
-            },
-            {
-               this_width,
-               this_height
-            }
-        };
+        v_init[worker_id]=matrix_t::init_sub_center(//global size
+                                                    width,
+                                                    height,
+                                                    //local size
+                                                    x, y,
+                                                    local_width,
+                                                    local_height,
+                                                    //zoom
+                                                    l_params.m_zoom);
         //send...
         if(worker_id!=0) world.i_send((void*)&v_init[worker_id],  (int)1, mpi_init_type, worker_id, TAG_INIT, send_queue);
     }
@@ -176,6 +154,8 @@ inline bool master(const argv_parameters&   l_params,
     });
     //get from master
     assert(g_matrix.get_from(0, 0, l_matrix));
+    //clean
+    l_matrix.clear();
     //count result
     size_t n_result = v_init.size() - 1;
     //wait the results
@@ -206,8 +186,8 @@ inline bool master(const argv_parameters&   l_params,
                       << v_init[worker_id].m_size[1]
                       << std::endl;
             #endif
-            //reinit local matrix
-            l_matrix = matrix_t(v_init[worker_id]);
+            //local matrix buffer
+            matrix_t l_matrix ( v_init[worker_id] );
             //get
             world.i_recv_lock((void*)l_matrix.get_raw_data(), (int)l_matrix.get_raw_size(), mpi_rgb_type, worker_id, TAG_MATRIX);
             //applay
@@ -216,8 +196,14 @@ inline bool master(const argv_parameters&   l_params,
             --n_result;
         }
     }
+    //save time
+    double time_to_complete = l_timer.time_elapsed();
+    //output name
+    const std::string output_name = build_string_output(l_params,l_polynomial);
+    //save metadata
+    save_string(output_name+".slb.json", "{ \"time\":"+std::to_string(time_to_complete)+" }");
     //save...
-    tga::save_matrix(build_string_output(l_params,l_polynomial), g_matrix);
+    tga::save_matrix(output_name+".slb.tga", g_matrix);
     //success
     return true;
 }

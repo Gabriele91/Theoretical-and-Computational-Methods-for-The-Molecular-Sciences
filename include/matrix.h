@@ -43,6 +43,27 @@ public:
         };
     }
     
+    static init_t init_sub_center(size_t width,
+                                  size_t height,
+                                  size_t x,
+                                  size_t y,
+                                  size_t local_width,
+                                  size_t local_height,
+                                  value_t factor)
+    {
+        return init_t
+        {
+            {
+                ((value_t)(local_width* (x)) - ((value_t)width/(value_t)2.0L) )*factor,
+                ((value_t)(local_height*(y)) - ((value_t)height/(value_t)2.0L))*factor
+            },
+            {
+                (size_t)(local_width),
+                (size_t)(local_height)
+            }
+        };
+    }
+    
     class row_index_t
     {
         
@@ -80,6 +101,14 @@ public:
         m_size[0] = init.m_size[0];
         m_size[1] = init.m_size[1];
         m_matrix  = matrix_t(new rgb_t[m_size[0]*m_size[1]]);
+    }
+    
+    void clear()
+    {
+        m_origin  = complex_t();
+        m_size[0] = 0;
+        m_size[1] = 0;
+        m_matrix  = matrix_t(nullptr);
     }
     
     bool get_from(size_t x,size_t y, const matrix<value_t>& in_matrix)

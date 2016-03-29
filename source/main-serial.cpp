@@ -19,33 +19,12 @@
 #include <succession.h>
 #include <parser.h>
 #include <argv_parser.h>
-
+#include <output_help.h>
+#include <mpi/interface.h>
 //schroeder
 //4000 4000
 //"(6+2i)z^0+(3+9i)z^1+(3+78i)z^2+(4+9i)z^3+(8+9i)z^4+z^5+z^8"
 //0.001
-template < class T >
-inline std::string build_string_output(const argv_parameters& l_params,
-                                       const polynomial< T >& l_polynomial)
-{
-    std::string
-    output = std::to_string(l_params.m_mxn[0]);
-    output+= "x";
-    output+= std::to_string(l_params.m_mxn[0]);
-    output+= "x";
-    output+= std::to_string(l_polynomial.size());
-    output+= "x";
-    output+= std::to_string(l_params.m_iteration);
-    output+= "x";
-    output+= std::to_string(l_params.m_zoom);
-    output+= ".";
-    output+= type_t_point_str;
-    output+= ".";
-    output+= l_params.m_kernel;
-    output+= ".tga";
-    
-    return output;
-}
 
 int main(int argc,const char* argv[])
 {
@@ -98,6 +77,8 @@ int main(int argc,const char* argv[])
     //roots
     roots_t      r_results = roots_utilities::compute(p_constants);
     vector_rgb_t r_colors = color::compute_colors< value_t >(r_results.size());
+    //get time
+    mpi_interface::timer l_timer;
     //init
     matrix_t matrix(matrix_t::init_center(parameters.m_mxn[0],
                                           parameters.m_mxn[1],
@@ -114,8 +95,14 @@ int main(int argc,const char* argv[])
     };
     //applay
     matrix.applay(context, parameters.m_zoom);
-    //save
-    tga::save_matrix(build_string_output(parameters,p_constants), matrix);
+    //save time
+    double time_to_complete = l_timer.time_elapsed();
+    //output name
+    const std::string output_name = build_string_output(parameters,p_constants);
+    //save metadata
+    save_string(output_name+"serial.json", "{ \"time\":"+std::to_string(time_to_complete)+" }");
+    //save...
+    tga::save_matrix(output_name+"serial.tga", matrix);
     //return
     return 0;
 }
