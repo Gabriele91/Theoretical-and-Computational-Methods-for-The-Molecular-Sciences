@@ -6,7 +6,7 @@
 //  Copyright © 2016 Gabriele. All rights reserved.
 //
 #pragma once
-#include "config.h"
+#include <config.h>
 #include <string>
 #include <sstream>
 #include <cstdlib>
