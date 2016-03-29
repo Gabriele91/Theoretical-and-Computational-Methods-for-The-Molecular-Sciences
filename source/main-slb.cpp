@@ -133,8 +133,8 @@ inline bool master(const argv_parameters&   l_params,
         size_t this_width  = local_width;
         size_t this_height = local_height;
         //remaning part
-        if(x==group_x-1)  this_width  += width%group_x;
-        if(y==group_y-1)  this_height += height%group_y;
+        if(x==group_x-1)  this_width  += width%local_width;
+        if(y==group_y-1)  this_height += height%local_height;
         //compute init
         v_init[worker_id]=init_t
         {
@@ -194,7 +194,18 @@ inline bool master(const argv_parameters&   l_params,
             size_t y = m_y * local_height;
             size_t x = m_x * local_width;
             //info
-            std::cout << "recv from: " <<  worker_id << " at " << x << ", " << y << std::endl;
+            #if 0
+            std::cout << "recv from: " <<  worker_id
+                      << " at "
+                      << x
+                      << ", "
+                      << y
+                      << " size "
+                      << v_init[worker_id].m_size[0]
+                      << ", "
+                      << v_init[worker_id].m_size[1]
+                      << std::endl;
+            #endif
             //init local matrix
             matrix_t l_matrix(v_init[worker_id]);
             //get
