@@ -82,6 +82,23 @@ public:
         m_matrix  = matrix_t(new rgb_t[m_size[0]*m_size[1]]);
     }
     
+    bool get_from(size_t x,size_t y, const matrix<value_t>& in_matrix)
+    {
+        bool b_success = ((x + in_matrix.width())  <= width() ) &&
+                         ((y + in_matrix.height()) <= height());
+        //copy
+        if (b_success)
+        {
+            for(size_t l_x=0; l_x != in_matrix.width();  ++l_x)
+            for(size_t l_y=0; l_y != in_matrix.height(); ++l_y)
+            {
+                operator()(x+l_x,y+l_y) = in_matrix(l_x,l_y);
+            }
+        }
+        //return
+        return b_success;
+    }
+    
     size_t width() const
     {
         return m_size[0];
@@ -90,6 +107,21 @@ public:
     size_t height() const
     {
         return m_size[1];
+    }
+    
+    size_t get_raw_size() const
+    {
+        return width()*height();
+    }
+    
+    rgb_t* get_raw_data()
+    {
+        return m_matrix.get();
+    }
+    
+    const rgb_t* get_raw_data() const
+    {
+        return m_matrix.get();
     }
     
     const complex_t& origin() const

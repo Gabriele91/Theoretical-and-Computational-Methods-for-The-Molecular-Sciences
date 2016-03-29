@@ -26,12 +26,13 @@ int mpi_status::get_error() const
 {
     return MPI_ERROR;
 }
-int mpi_status::get_count() const
+size_t mpi_status::get_count() const
 {
     return count;
 }
 int mpi_status::get_count(mpi_handle type) const
 {
+    //unsafe...
     int type_count { 0 };
     MPI_Get_count(reinterpret_cast<const MPI_Status*>(this), (MPI_Datatype)type, &type_count);;
     return type_count;

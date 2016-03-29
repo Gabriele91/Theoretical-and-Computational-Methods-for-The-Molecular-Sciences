@@ -65,21 +65,53 @@ namespace kernels
         return x-s1;
     };
     
+    //get kernel field
     template < class T >
-    inline kernel<T> get_kernel_from_name(const std::string& k_name)
+    struct kernel_field
     {
-        //get kernel pointer
-        struct kernel_field
-        {
-            std::string m_name;
-            kernel<T>   m_kernel;
-        };
-        std::vector< kernel_field > kernels_list=
+        std::string m_name;
+        kernel<T>   m_kernel;
+    };
+    
+    template < class T >
+    using kernels_table = std::vector< kernel_field<T> >;
+    
+    template < class T >
+    inline const kernels_table<T>& get_kernels_table()
+    {
+        static kernels_table<T> kernels_table=
         {
             {"newton"   ,kernels::newton< T >   },
             {"schroeder",kernels::schroeder< T >}
         };
-        for(auto& field:kernels_list)
+        return kernels_table;
+    }
+    
+    template < class T >
+    inline long get_kernel_id_from_name(const std::string& k_name)
+    {
+        //id count
+        long id_count = 0;
+        //search
+        for(auto& field : get_kernels_table< T >())
+        {
+            if(field.m_name == k_name) return id_count;
+            //count...
+            ++id_count;
+        }
+        return -1;
+    }
+    
+    template < class T >
+    inline kernel<T> get_kernel_from_id(long id)
+    {
+        return  get_kernels_table< T >()[id].m_kernel;
+    }
+    
+    template < class T >
+    inline kernel<T> get_kernel_from_name(const std::string& k_name)
+    {
+        for(auto& field: get_kernels_table< T >())
         {
             if(field.m_name == k_name) return field.m_kernel;
         }

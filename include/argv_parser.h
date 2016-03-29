@@ -23,10 +23,18 @@ struct argv_parameters
     //errors
     bool            m_success   { true        };
     std::string     m_errors;
+    //required
+    bool            m_require_mxn      { true  };
+    bool            m_require_qxp      { false };
+    bool            m_require_iteration{ true  };
+    bool            m_require_zoom     { false };
+    bool            m_require_poly     { true  };
+    bool            m_require_kernel   { true  };
 };
 
 
-inline bool argv_parse(int argc,const char* argv[],argv_parameters& output)
+inline bool argv_parse(int argc,const char* argv[],
+                       argv_parameters& output)
 {
     //invalid input
     if(argc < 1) return false;
@@ -35,10 +43,12 @@ inline bool argv_parse(int argc,const char* argv[],argv_parameters& output)
     //C++ args
     std::vector< std::string > v_args;
     //required attrs
-    bool b_mxn      { false };
-    bool b_kernel   { false };
-    bool b_poly     { false };
-    bool b_iteration{ false };
+    bool b_mxn      = false|| !output.m_require_mxn;
+    bool b_kernel   = false|| !output.m_require_kernel;
+    bool b_poly     = false|| !output.m_require_poly;
+    bool b_iteration= false|| !output.m_require_iteration;
+    bool b_zoom     = false|| !output.m_require_zoom;
+    bool b_qxp      = false|| !output.m_require_qxp;
     //alloc args
     v_args.resize(argc-1);
     //copy args
@@ -76,6 +86,8 @@ inline bool argv_parse(int argc,const char* argv[],argv_parameters& output)
             }
             output.m_qxp[0] = std::strtoul(v_args[++i].c_str(),nullptr,10);
             output.m_qxp[1] = std::strtoul(v_args[++i].c_str(),nullptr,10);
+            //is added
+            b_qxp = true;
         }
         else if( v_args[i]=="-p" || v_args[i]=="--polynomial" )
         {
@@ -122,6 +134,8 @@ inline bool argv_parse(int argc,const char* argv[],argv_parameters& output)
                 return false;
             }
             output.m_zoom = std::strtod(v_args[++i].c_str(),nullptr);
+            //is added
+            b_zoom = true;
         }
         else
         {
@@ -156,22 +170,50 @@ inline bool argv_parse(int argc,const char* argv[],argv_parameters& output)
         output.m_errors += "--mxn is required\n" ;
     }
     
+    if(!b_qxp)
+    {
+        output.m_success = false;
+        output.m_errors += "--qxp is required\n" ;
+    }
+    
+    if(!b_zoom)
+    {
+        output.m_success = false;
+        output.m_errors += "--zoom is required\n" ;
+    }
+    
     return output.m_success;
 }
 
 inline std::string get_help(const argv_parameters& params)
 {
-    std::stringstream stream;
-    stream << params.m_app << " [options] \n";
-    stream <<
+    
+    static const char c_str_required[]     = "[required]";
+    static const char c_str_not_required[] = "          ";
+    static const char c_str_options [] =
     "Options:                                                                \n"
     "\t--help/-h                       help                                  \n"
-    "\t--polynomial/-p <expression>    polynomial expression       [required]\n"
-    "\t--kernel/-k  <kernel name>      resolution method           [required]\n"
-    "\t--iteration/-i <number>         number of iteration         [required]\n"
-    "\t--mxn/-m  <width> <height>      matrix resolution           [required]\n"
-    "\t--qxp/-q  <width> <height>      matrix subdivision                    \n"
-    "\t--zoom/-z <zoom factor>         zoom factor into center area          \n";
+    "\t--polynomial/-p <expression>    polynomial expression               %s\n"
+    "\t--kernel/-k  <kernel name>      resolution method                   %s\n"
+    "\t--iteration/-i <number>         number of iteration                 %s\n"
+    "\t--mxn/-m  <width> <height>      matrix resolution                   %s\n"
+    "\t--qxp/-q  <width> <height>      matrix subdivision                  %s\n"
+    "\t--zoom/-z <zoom factor>         zoom factor into center area        %s\n";
+    
+    char c_str_out_options [sizeof(c_str_options)*2];
+    std::sprintf(c_str_out_options,
+                 c_str_options,
+                 params.m_require_poly      ? c_str_required : c_str_not_required,
+                 params.m_require_kernel    ? c_str_required : c_str_not_required,
+                 params.m_require_iteration ? c_str_required : c_str_not_required,
+                 params.m_require_mxn       ? c_str_required : c_str_not_required,
+                 params.m_require_qxp       ? c_str_required : c_str_not_required,
+                 params.m_require_zoom      ? c_str_required : c_str_not_required);
+    
+    
+    std::stringstream stream;
+    stream << params.m_app << " [options] \n";
+    stream << c_str_out_options;
     
     return stream.str();
 }

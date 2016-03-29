@@ -48,11 +48,21 @@ bool mpi_comm::prob(int source,
                     int tag,
                     mpi_status& r_status)
 {
-    return
-    MPI_Probe(source,
-              tag,
-              (MPI_Comm)m_type,
-              (MPI_Status*)&r_status) == MPI_SUCCESS;
+    //temp
+    MPI_Status status;
+    //get
+    if(MPI_Probe(source,
+                 tag,
+                 (MPI_Comm)m_type,
+                 (MPI_Status*)&status) != MPI_SUCCESS) return false;
+    //copy
+    r_status.MPI_TAG = status.MPI_TAG;
+    r_status.MPI_SOURCE = status.MPI_SOURCE;
+    r_status.MPI_ERROR = status.MPI_ERROR;
+    r_status.count = status._ucount;
+    r_status.cancelled = status._cancelled;
+    //true
+    return true;
 }
 
 bool mpi_comm::send(void* buffer,
@@ -108,12 +118,39 @@ bool mpi_comm::i_prob(int source,
                       int& flag,
                       mpi_status& r_status)
 {
-    return
-    MPI_Iprobe(source,
-               tag,
-               (MPI_Comm)m_type,
-               &flag,
-               (MPI_Status*)&r_status) == MPI_SUCCESS;
+    //temp
+    MPI_Status status;
+    //get
+    if(MPI_Iprobe(source,
+                  tag,
+                  (MPI_Comm)m_type,
+                  &flag,
+                  (MPI_Status*)&status) != MPI_SUCCESS) return false;
+    //copy
+    r_status.MPI_TAG = status.MPI_TAG;
+    r_status.MPI_SOURCE = status.MPI_SOURCE;
+    r_status.MPI_ERROR = status.MPI_ERROR;
+    r_status.count = status._ucount;
+    r_status.cancelled = status._cancelled;
+    //true
+    return true;
+}
+
+bool mpi_comm::i_send_lock(void* buffer,
+                           int count,
+                           mpi_handle type,
+                           int dest,
+                           int tag)
+{
+    mpi_request request;
+    if(MPI_Isend(buffer,
+                 count,
+                 (MPI_Datatype)type,
+                 dest,
+                 tag,
+                 (MPI_Comm)m_type,
+                 (MPI_Request*)&(request.m_request)) != MPI_SUCCESS) return false;
+    return request.wait();
 }
 
 bool mpi_comm::i_send(void* buffer,
@@ -149,6 +186,23 @@ bool mpi_comm::i_send(void* buffer,
               tag,
               (MPI_Comm)m_type,
               (MPI_Request*)&(q_request.get_a_request().m_request)) == MPI_SUCCESS;
+}
+    
+bool mpi_comm::i_recv_lock(void* buffer,
+                           int count,
+                           mpi_handle type,
+                           int source,
+                           int tag)
+{
+    mpi_request request;
+    if(MPI_Irecv(buffer,
+                 count,
+                 (MPI_Datatype)type,
+                 source,
+                 tag,
+                 (MPI_Comm)m_type,
+                 (MPI_Request*)&(request.m_request)) != MPI_SUCCESS) return false;
+    return request.wait();
 }
 
 bool mpi_comm::i_recv(void* buffer,

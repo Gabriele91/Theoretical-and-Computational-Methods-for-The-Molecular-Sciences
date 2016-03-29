@@ -34,21 +34,21 @@ namespace mpi_interface
     {
     public:
         
-        int get_source()          const;
-        int get_tag()             const;
-        int get_error()           const;
-        int get_count()           const;
-        int get_count(mpi_handle) const;
-        int get_cancelled()       const;
+        int    get_source()          const;
+        int    get_tag()             const;
+        int    get_error()           const;
+        size_t get_count()           const;
+        int    get_count(mpi_handle) const;
+        int    get_cancelled()       const;
         
     private:
         
         //attributes
-        int count;
-        int cancelled;
-        int MPI_SOURCE;
-        int MPI_TAG;
-        int MPI_ERROR;
+        size_t count;
+        int    cancelled;
+        int    MPI_SOURCE;
+        int    MPI_TAG;
+        int    MPI_ERROR;
         
         //friend class
         friend class mpi_comm;
@@ -169,6 +169,12 @@ namespace mpi_interface
                     int& flag,
                     mpi_status& status);
         
+        bool i_send_lock(void* buffer,
+                         int count,
+                         mpi_handle type,
+                         int dest,
+                         int tag);
+        
         bool i_send(void* buffer,
                     int count,
                     mpi_handle type,
@@ -182,6 +188,12 @@ namespace mpi_interface
                     int dest,
                     int tag,
                     mpi_async_queue& q_request);
+        
+        bool i_recv_lock(void* buffer,
+                         int count,
+                         mpi_handle type,
+                         int source,
+                         int tag);
         
         bool i_recv(void* buffer,
                     int count,
