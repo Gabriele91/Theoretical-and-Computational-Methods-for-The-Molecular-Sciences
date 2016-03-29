@@ -78,6 +78,28 @@ mpi::mpi_handle build_init_t()
     return handle;
 }
 
+template < class T >
+inline std::string build_string_output(const argv_parameters& l_params,
+                                       const polynomial< T >& l_polynomial)
+{
+    std::string
+    output = std::to_string(l_params.m_mxn[0]);
+    output+= "x";
+    output+= std::to_string(l_params.m_mxn[0]);
+    output+= "x";
+    output+= std::to_string(l_polynomial.size());
+    output+= "x";
+    output+= std::to_string(l_params.m_iteration);
+    output+= "x";
+    output+= std::to_string(l_params.m_zoom);
+    output+= ".";
+    output+= type_t_point_str;
+    output+= ".";
+    output+= l_params.m_kernel;
+    output+= ".tga";
+    
+    return output;
+}
 
 
 inline bool master(const argv_parameters&   l_params,
@@ -117,8 +139,8 @@ inline bool master(const argv_parameters&   l_params,
         v_init[worker_id]=init_t
         {
             {
-                (value_t)(local_width*(x)),
-                (value_t)(local_height*(y))
+                ((value_t)(local_width* (x)) - ((value_t)width/(value_t)2.0L) )*l_params.m_zoom,
+                ((value_t)(local_height*(y)) - ((value_t)height/(value_t)2.0L))*l_params.m_zoom
             },
             {
                this_width,
@@ -184,7 +206,7 @@ inline bool master(const argv_parameters&   l_params,
         }
     }
     //save...
-    tga::save_matrix("/Users/Gabriele/Desktop/test.tga", g_matrix);
+    tga::save_matrix(build_string_output(l_params,l_polynomial), g_matrix);
     //success
     return true;
 }

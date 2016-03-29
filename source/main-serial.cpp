@@ -24,6 +24,28 @@
 //4000 4000
 //"(6+2i)z^0+(3+9i)z^1+(3+78i)z^2+(4+9i)z^3+(8+9i)z^4+z^5+z^8"
 //0.001
+template < class T >
+inline std::string build_string_output(const argv_parameters& l_params,
+                                       const polynomial< T >& l_polynomial)
+{
+    std::string
+    output = std::to_string(l_params.m_mxn[0]);
+    output+= "x";
+    output+= std::to_string(l_params.m_mxn[0]);
+    output+= "x";
+    output+= std::to_string(l_polynomial.size());
+    output+= "x";
+    output+= std::to_string(l_params.m_iteration);
+    output+= "x";
+    output+= std::to_string(l_params.m_zoom);
+    output+= ".";
+    output+= type_t_point_str;
+    output+= ".";
+    output+= l_params.m_kernel;
+    output+= ".tga";
+    
+    return output;
+}
 
 int main(int argc,const char* argv[])
 {
@@ -92,24 +114,8 @@ int main(int argc,const char* argv[])
     };
     //applay
     matrix.applay(context, parameters.m_zoom);
-    //ouput string
-    std::string
-    output = std::to_string(parameters.m_mxn[0]);
-    output+= "x";
-    output+= std::to_string(parameters.m_mxn[0]);
-    output+= "x";
-    output+= std::to_string(p_constants.size());
-    output+= "x";
-    output+= std::to_string(parameters.m_iteration);
-    output+= "x";
-    output+= std::to_string(parameters.m_zoom);
-    output+= ".";
-    output+= type_t_point_str;
-    output+= ".";
-    output+= parameters.m_kernel;
-    output+= ".tga";
     //save
-    tga::save_matrix(output, matrix);
+    tga::save_matrix(build_string_output(parameters,p_constants), matrix);
     //return
     return 0;
 }
