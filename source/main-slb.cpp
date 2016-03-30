@@ -42,13 +42,7 @@ auto&     world = mpi::mpi_world;
 //type tag
 enum tag
 {
-    TAG_SIZES_TYPES = 1,
-    TAG_INIT,
-    TAG_POLY,
-    TAG_ROOTS,
-    TAG_RGBS,
-    TAG_KERNEL_ID,
-    TAG_ZOOM,
+    TAG_INIT = 1,
     TAG_MATRIX, 
     TAG_NONE
 };

@@ -118,10 +118,12 @@ public:
         //copy
         if (b_success)
         {
-            for(size_t l_x=0; l_x != in_matrix.width();  ++l_x)
             for(size_t l_y=0; l_y != in_matrix.height(); ++l_y)
             {
-                operator()(x+l_x,y+l_y) = in_matrix(l_x,l_y);
+                //copy rows
+                std::memcpy( &m_matrix[ x+(y+l_y)*width() ],
+                             &in_matrix.m_matrix[ l_y * in_matrix.width()  ],
+                             in_matrix.width()*sizeof(rgb_t) );
             }
         }
         //return

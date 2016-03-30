@@ -320,6 +320,17 @@ namespace mpi_interface
         };
     }
     
+    template < typename C, typename R>
+    mpi_data_field mpi_attr(mpi_handle type, R C::*M, const size_t size = 1)
+    {
+        return
+        {
+            type,
+            reinterpret_cast<std::size_t>(&(((C*)0)->*M)),
+            size
+        };
+    }
+    
 #else
 
     //attribute offset
