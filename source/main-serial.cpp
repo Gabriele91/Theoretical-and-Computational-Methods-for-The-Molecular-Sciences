@@ -100,7 +100,7 @@ int main(int argc,const char* argv[])
     //output name
     const std::string output_name = build_string_output(parameters,p_constants);
     //save metadata
-    save_string(output_name+"serial.json", "{ \"time\":"+std::to_string(time_to_complete)+" }");
+    save_string(output_name+".serial.json", "{ \"time\":"+std::to_string(time_to_complete)+" }");
     //save...
     tga::save_matrix(output_name+".serial.tga", matrix);
     //return
