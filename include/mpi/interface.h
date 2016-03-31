@@ -157,6 +157,11 @@ namespace mpi_interface
                   int tag,
                   mpi_status& status);
         
+        bool bcast(void* buffer,
+                   int count,
+                   mpi_handle type,
+                   int root = 0);
+        
         bool send(void* buffer,
                   int count,
                   mpi_handle type,
@@ -182,6 +187,23 @@ namespace mpi_interface
                     int  tag,
                     int& flag,
                     mpi_status& status);
+        
+        bool i_bcast_lock(void* buffer,
+                          int count,
+                          mpi_handle type,
+                          int root = 0);
+        
+        bool i_bcast(void* buffer,
+                     int count,
+                     mpi_handle type,
+                     int root,
+                     mpi_request& request);
+        
+        bool i_bcast(void* buffer,
+                     int count,
+                     mpi_handle type,
+                     int root,
+                     mpi_async_queue& q_request);
         
         bool i_send_lock(void* buffer,
                          int count,
@@ -222,6 +244,7 @@ namespace mpi_interface
                     int source,
                     int tag,
                     mpi_async_queue& q_request);
+        
     };
     extern const int mpi_any_tag;
     extern const int mpi_any_source;

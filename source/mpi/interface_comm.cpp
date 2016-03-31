@@ -64,7 +64,19 @@ bool mpi_comm::prob(int source,
     //true
     return true;
 }
-
+    
+bool  mpi_comm::bcast(void* buffer,
+                      int count,
+                      mpi_handle type,
+                      int root)
+    {
+        return MPI_Bcast(buffer,
+                         count,
+                         (MPI_Datatype)type,
+                         root,
+                         (MPI_Comm)m_type) == MPI_SUCCESS;
+}
+    
 bool mpi_comm::send(void* buffer,
                     int count,
                     mpi_handle type,
@@ -136,6 +148,55 @@ bool mpi_comm::i_prob(int source,
     return true;
 }
 
+    
+bool mpi_comm::i_bcast_lock(void* buffer,
+                            int count,
+                            mpi_handle type,
+                            int root)
+
+{
+    mpi_request request;
+    if(MPI_Ibcast(buffer,
+                  count,
+                  (MPI_Datatype)type,
+                  root,
+                  (MPI_Comm)m_type,
+                  (MPI_Request*)&(request.m_request)) != MPI_SUCCESS) return false;
+    return request.wait();
+}
+    
+bool mpi_comm::i_bcast(void* buffer,
+                       int count,
+                       mpi_handle type,
+                       int root,
+                       mpi_request& request)
+    
+{
+    return
+    MPI_Ibcast(buffer,
+              count,
+              (MPI_Datatype)type,
+              root,
+              (MPI_Comm)m_type,
+              (MPI_Request*)&(request.m_request)) == MPI_SUCCESS;
+}
+
+bool mpi_comm::i_bcast(void* buffer,
+                       int count,
+                       mpi_handle type,
+                       int root,
+                       mpi_async_queue& q_request)
+
+{
+    return
+    MPI_Ibcast(buffer,
+               count,
+               (MPI_Datatype)type,
+               root,
+               (MPI_Comm)m_type,
+               (MPI_Request*)&(q_request.get_a_request().m_request)) == MPI_SUCCESS;
+}
+    
 bool mpi_comm::i_send_lock(void* buffer,
                            int count,
                            mpi_handle type,
