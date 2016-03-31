@@ -77,15 +77,23 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-k newton"
+            argument = "-k schroeder"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-m 1000 1000"
+            argument = "-m 5000 5000"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-i  50"
+            argument = "-q 2 2"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-f 0.5"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-i  3"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

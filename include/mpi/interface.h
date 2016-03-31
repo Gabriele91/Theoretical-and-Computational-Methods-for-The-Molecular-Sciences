@@ -66,6 +66,7 @@ namespace mpi_interface
         
         //friend class
         friend class mpi_comm;
+        friend class mpi_request;
     };
     
     class mpi_request
@@ -78,7 +79,7 @@ namespace mpi_interface
         bool cancel();
         bool free();
         bool valid() const;
-        bool test(int& flag,mpi_status& status) const;
+        bool test(int& flag,mpi_status& status);
         ~mpi_request();
         
     private:

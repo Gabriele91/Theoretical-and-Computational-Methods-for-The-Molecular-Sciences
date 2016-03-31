@@ -218,3 +218,20 @@ private:
     matrix_t    m_matrix;
     
 };
+
+namespace std
+{
+    template < typename T >
+    inline std::string to_string(const typename matrix< T >::init_t& init)
+    {
+        return "(" +
+               to_string(init.m_origin.real()) +
+               "," +
+               to_string(init.m_origin.imag()) +
+               "), (" +
+               to_string(init.m_size[0]) +
+               "," +
+               to_string(init.m_size[1]) +
+               ")";
+    }
+}

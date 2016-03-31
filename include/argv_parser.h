@@ -17,6 +17,7 @@ struct argv_parameters
     size_t          m_iteration{ 0            };
     type_t          m_zoom     { (type_t)1.0L };
     bool            m_help     { false        };
+    type_t          m_factor   { (type_t)1.0L };
     std::string     m_app;
     std::string     m_poly;
     std::string     m_kernel;
@@ -30,6 +31,7 @@ struct argv_parameters
     bool            m_require_zoom     { false };
     bool            m_require_poly     { true  };
     bool            m_require_kernel   { true  };
+    bool            m_require_factor   { false };
 };
 
 
@@ -49,6 +51,7 @@ inline bool argv_parse(int argc,const char* argv[],
     bool b_iteration= false|| !output.m_require_iteration;
     bool b_zoom     = false|| !output.m_require_zoom;
     bool b_qxp      = false|| !output.m_require_qxp;
+    bool b_factor   = false|| !output.m_require_factor;
     //alloc args
     v_args.resize(argc-1);
     //copy args
@@ -137,6 +140,18 @@ inline bool argv_parse(int argc,const char* argv[],
             //is added
             b_zoom = true;
         }
+        else if( v_args[i]=="-f" || v_args[i]=="--factor" )
+        {
+            if(i+1 >= v_args.size())
+            {
+                output.m_success = false;
+                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                return false;
+            }
+            output.m_factor = std::strtod(v_args[++i].c_str(),nullptr);
+            //is added
+            b_factor = true;
+        }
         else
         {
             output.m_success = false;
@@ -182,6 +197,12 @@ inline bool argv_parse(int argc,const char* argv[],
         output.m_errors += "--zoom is required\n" ;
     }
     
+    if(!b_factor)
+    {
+        output.m_success = false;
+        output.m_errors += "--factor is required\n" ;
+    }
+    
     return output.m_success;
 }
 
@@ -198,7 +219,8 @@ inline std::string get_help(const argv_parameters& params)
     "\t--iteration/-i <number>         number of iteration                 %s\n"
     "\t--mxn/-m  <width> <height>      matrix resolution                   %s\n"
     "\t--qxp/-q  <width> <height>      matrix subdivision                  %s\n"
-    "\t--zoom/-z <zoom factor>         zoom factor into center area        %s\n";
+    "\t--zoom/-z <zoom factor>         zoom factor into center area        %s\n"
+    "\t--zoom/-z <split factor>        subdivision factor                  %s\n";
     
     char c_str_out_options [sizeof(c_str_options)*2];
     std::sprintf(c_str_out_options,
@@ -208,7 +230,8 @@ inline std::string get_help(const argv_parameters& params)
                  params.m_require_iteration ? c_str_required : c_str_not_required,
                  params.m_require_mxn       ? c_str_required : c_str_not_required,
                  params.m_require_qxp       ? c_str_required : c_str_not_required,
-                 params.m_require_zoom      ? c_str_required : c_str_not_required);
+                 params.m_require_zoom      ? c_str_required : c_str_not_required,
+                 params.m_require_factor    ? c_str_required : c_str_not_required);
     
     
     std::stringstream stream;

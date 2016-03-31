@@ -65,8 +65,8 @@ mpi::mpi_handle build_init_t()
 {
     mpi::mpi_handle handle =
     mpi::type_create_struct({
-        mpi::mpi_attr(&init_t::m_origin,2),
-        mpi::mpi_attr(&init_t::m_size,  2)
+        mpi::mpi_attr(&init_t::m_origin),
+        mpi::mpi_attr(&init_t::m_size,2)
     });
     mpi::type_commit(handle);
     //get handle

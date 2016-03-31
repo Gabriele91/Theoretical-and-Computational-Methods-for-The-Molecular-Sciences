@@ -102,7 +102,7 @@ int main(int argc,const char* argv[])
     //save metadata
     save_string(output_name+"serial.json", "{ \"time\":"+std::to_string(time_to_complete)+" }");
     //save...
-    tga::save_matrix(output_name+"serial.tga", matrix);
+    tga::save_matrix(output_name+".serial.tga", matrix);
     //return
     return 0;
 }
