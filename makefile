@@ -25,10 +25,11 @@ C_FLAGS   = -I$(I_MPI) -I$(I_DIR) -I$(MPI_INCLUDE) -DUSE_${PRECISION} -O3
 CPP_FLAGS = -std=c++11
 LD_FLAGS  = -L$(MPI_LIB) -Xlinker -no_deduplicate -lmpi -lmpi_cxx -stdlib=libc++ 
 
+IS_INTEL ?= false
 ## if use a intel compiler 
 ## enable the ipo flag
-ifeq($(CPP),icpc)
-  CPP_FLAGS += -ipo
+ifeq ($(IS_INTEL),true)
+	CPP_FLAGS += -ipo
 endif
 
 SERIAL_CPP_FILES := $(S_DIR)/main-serial.cpp $(S_DIR)/complexmath.cpp
