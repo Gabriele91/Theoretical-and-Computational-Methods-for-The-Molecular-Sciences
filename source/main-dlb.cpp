@@ -291,7 +291,7 @@ inline bool slave(const argv_parameters&   l_params,
     world.i_recv((void*)&b_end,  (int)1, mpi::type<bool>(), worker_id_root, TAG_END, request_end);
     //request init
     init_t           l_init{0};
-    int              b_request_init { false };
+    int              b_init { false };
     mpi::mpi_status  status_init;
     mpi::mpi_request request_init;
     world.i_recv((void*)&l_init, (int)1, mpi_init_type, worker_id_root, TAG_INIT, request_init);
@@ -299,9 +299,9 @@ inline bool slave(const argv_parameters&   l_params,
     while(!b_end)
     {
         //test
-        request_init.test(b_request_init, status_init);
+        request_init.test(b_init, status_init);
         //have a init message
-        if(b_request_init)
+        if(b_init)
         {
             //init
             matrix_t matrix(l_init);
