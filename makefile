@@ -1,7 +1,7 @@
 
 PRECISION?= DOUBLE
 COMPILER ?= clang++
-ARCH     ?= x86_64
+ARCH     ?= $(uname -m)
 CPP 	  = $(COMPILER) -arch $(ARCH)
 MKDIR_P   = mkdir -p
 
@@ -20,10 +20,17 @@ OUTPUT  = bin
 MPI_DIR    ?= /usr/local/Cellar/open-mpi/1.10.2
 MPI_INCLUDE = $(MPI_DIR)/include
 MPI_LIB     = $(MPI_DIR)/lib
+MPI_CH     ?= false
+
+ifeq ($(MPI_CH),true)
+	MPI_REF = -lmpich -lmpichcxx
+else
+	MPI_REF = -lmpi -lmpi_cxx
+endif
 
 C_FLAGS   = -I$(I_MPI) -I$(I_DIR) -I$(MPI_INCLUDE) -DUSE_${PRECISION} -O3 
 CPP_FLAGS = -std=c++11
-LD_FLAGS  = -L$(MPI_LIB) -Xlinker -no_deduplicate -lmpi -lmpi_cxx -stdlib=libc++ 
+LD_FLAGS  = -L$(MPI_LIB) -Xlinker -no_deduplicate $(MPI_REF) -stdlib=libc++ 
 
 IS_INTEL ?= false
 ## if use a intel compiler 
