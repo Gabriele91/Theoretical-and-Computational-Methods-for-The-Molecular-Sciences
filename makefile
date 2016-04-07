@@ -30,13 +30,21 @@ endif
 
 C_FLAGS   = -I$(I_MPI) -I$(I_DIR) -I$(MPI_INCLUDE) -DUSE_${PRECISION} -O3 
 CPP_FLAGS = -std=c++11
-LD_FLAGS  = -L$(MPI_LIB) -Xlinker -no_deduplicate $(MPI_REF) -stdlib=libc++ 
+LD_FLAGS  = -L$(MPI_LIB) -Xlinker $(MPI_REF) 
 
 IS_INTEL ?= false
 ## if use a intel compiler 
 ## enable the ipo flag
 ifeq ($(IS_INTEL),true)
-	CPP_FLAGS += -ipo
+#	CPP_FLAGS += -ipo
+else
+	LD_FLAGS  += -no_deduplicate -stdlib=libc++ 
+endif
+
+HIDE_MPI_STATUS?=true
+#if use mpich disable "HIDE_MPI_STATUS"
+ifeq ($(HIDE_MPI_STATUS),true)
+	CPP_FLAGS += -DDIABLE_HIDE_MPI_STATUS
 endif
 
 SERIAL_CPP_FILES := $(S_DIR)/main-serial.cpp $(S_DIR)/complexmath.cpp
