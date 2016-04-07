@@ -64,8 +64,10 @@ bool mpi_request::test(int& flag,mpi_status& r_status)
     r_status.MPI_TAG = status.MPI_TAG;
     r_status.MPI_SOURCE = status.MPI_SOURCE;
     r_status.MPI_ERROR = status.MPI_ERROR;
+    #ifndef DIABLE_HIDE_MPI_STATUS
     r_status.count = status._ucount;
     r_status.cancelled = status._cancelled;
+    #endif
     //is complete
     if(success && flag)
     {

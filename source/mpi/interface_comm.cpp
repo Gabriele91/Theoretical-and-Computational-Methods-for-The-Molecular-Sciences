@@ -59,8 +59,10 @@ bool mpi_comm::prob(int source,
     r_status.MPI_TAG = status.MPI_TAG;
     r_status.MPI_SOURCE = status.MPI_SOURCE;
     r_status.MPI_ERROR = status.MPI_ERROR;
+    #ifndef DIABLE_HIDE_MPI_STATUS
     r_status.count = status._ucount;
     r_status.cancelled = status._cancelled;
+    #endif
     //true
     return true;
 }
@@ -142,8 +144,10 @@ bool mpi_comm::i_prob(int source,
     r_status.MPI_TAG = status.MPI_TAG;
     r_status.MPI_SOURCE = status.MPI_SOURCE;
     r_status.MPI_ERROR = status.MPI_ERROR;
+    #ifndef DIABLE_HIDE_MPI_STATUS
     r_status.count = status._ucount;
     r_status.cancelled = status._cancelled;
+    #endif
     //true
     return true;
 }

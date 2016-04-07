@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <complex>
+#include <memory>
 #include <assert.h>
 
 namespace mpi_interface
@@ -370,7 +371,7 @@ namespace std
 {
     inline std::string to_string(const mpi_interface::mpi_info::mpi_version& version)
     {
-        return to_string(version.m_version) + "." + to_string(version.m_sub_version);
+        return std::to_string((long long)version.m_version) + "." + std::to_string((long long)version.m_sub_version);
     }
-}
+};
 
