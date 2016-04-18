@@ -2,7 +2,7 @@
 PRECISION?= DOUBLE
 COMPILER ?= clang++
 ARCH     ?= $(uname -m)
-CPP 	  = $(COMPILER) -arch $(ARCH)
+CPP 	  = $(COMPILER) 
 MKDIR_P   = mkdir -p
 
 PRECISION_LOW := $(shell echo $(PRECISION)     | tr "[:upper:]" "[:lower:]")
@@ -36,9 +36,10 @@ IS_INTEL ?= false
 ## if use a intel compiler 
 ## enable the ipo flag
 ifeq ($(IS_INTEL),true)
-#	CPP_FLAGS += -ipo
+#   CPP_FLAGS += -ipo
+	LD_FLAGS  += -march=$(ARCH)
 else
-	LD_FLAGS  += -no_deduplicate -stdlib=libc++ 
+	LD_FLAGS  += -arch $(ARCH) -no_deduplicate -stdlib=libc++ 
 endif
 
 HIDE_MPI_STATUS?=true
@@ -70,15 +71,15 @@ slb: directories $(SLB_OBJ_FILES) $(MPI_OBJ_FILES)
 dlb: directories $(DLB_OBJ_FILES) $(MPI_OBJ_FILES)
 	$(CPP) $(LD_FLAGS) -o $(OUTPUT)/dlb-$(PRECISION_LOW) $(DLB_OBJ_FILES) $(MPI_OBJ_FILES)
 
-directories: ${O_DIR} ${O_MPI} ${OUTPUT}
+directories: $(O_DIR) $(O_MPI) $(OUTPUT)
 
 ${OUTPUT}:
 	${MKDIR_P} ${OUTPUT}
 
-${O_DIR}:
+$(O_DIR):
 	${MKDIR_P} ${O_DIR}
 
-${O_MPI}:
+$(O_MPI):
 	${MKDIR_P} ${O_MPI}
 
 $(O_DIR)/%.o: $(S_DIR)/%.cpp

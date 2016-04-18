@@ -6,6 +6,7 @@
 //  Copyright © 2016 Gabriele. All rights reserved.
 //
 #pragma once
+#include <limits>
 #include <color.h>
 #include <kernels.h>
 #include <matrix.h>

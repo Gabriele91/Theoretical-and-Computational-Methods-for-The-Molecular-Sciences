@@ -7,6 +7,7 @@
 //
 #pragma once
 #include <memory>
+#include <cstring>
 #include <complexmath.h>
 #include <functional>
 #include <color.h>

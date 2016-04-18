@@ -16,15 +16,15 @@ inline std::string build_string_output(const argv_parameters& l_params,
                                        const polynomial< T >& l_polynomial)
 {
     std::string
-    output = std::to_string(l_params.m_mxn[0]);
+    output = std::to_string((unsigned long long)l_params.m_mxn[0]);
     output+= "x";
-    output+= std::to_string(l_params.m_mxn[0]);
+    output+= std::to_string((unsigned long long)l_params.m_mxn[0]);
     output+= "x";
-    output+= std::to_string(l_polynomial.size());
+    output+= std::to_string((unsigned long long)l_polynomial.size());
     output+= "x";
-    output+= std::to_string(l_params.m_iteration);
+    output+= std::to_string((unsigned long long)l_params.m_iteration);
     output+= "x";
-    output+= std::to_string(l_params.m_zoom);
+    output+= std::to_string((long double)l_params.m_zoom);
     output+= ".";
     output+= type_t_point_str;
     output+= ".";

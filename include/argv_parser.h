@@ -71,7 +71,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+2 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_mxn[0] = std::strtoul(v_args[++i].c_str(),nullptr,10);
@@ -84,7 +84,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+2 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_qxp[0] = std::strtoul(v_args[++i].c_str(),nullptr,10);
@@ -97,7 +97,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+1 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_poly = v_args[++i];
@@ -109,7 +109,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+1 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_kernel = v_args[++i];
@@ -121,7 +121,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+1 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_iteration = std::strtoul(v_args[++i].c_str(),nullptr,10);
@@ -133,7 +133,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+1 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_zoom = std::strtod(v_args[++i].c_str(),nullptr);
@@ -145,7 +145,7 @@ inline bool argv_parse(int argc,const char* argv[],
             if(i+1 >= v_args.size())
             {
                 output.m_success = false;
-                output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+                output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
                 return false;
             }
             output.m_factor = std::strtod(v_args[++i].c_str(),nullptr);
@@ -155,7 +155,7 @@ inline bool argv_parse(int argc,const char* argv[],
         else
         {
             output.m_success = false;
-            output.m_errors  = "not valid input["+ std::to_string(i) +"]: " + v_args[i] + "\n";
+            output.m_errors  = "not valid input["+ std::to_string((unsigned long long)i) +"]: " + v_args[i] + "\n";
             return false;
         }
     }

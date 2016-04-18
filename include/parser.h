@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <complex>
+#include <algorithm>
 #include <polynomial.h>
 
 template < typename T >

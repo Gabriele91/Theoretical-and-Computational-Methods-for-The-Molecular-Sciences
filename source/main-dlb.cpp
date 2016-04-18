@@ -254,7 +254,7 @@ inline bool master(const argv_parameters&   l_params,
     //output name
     const std::string output_name = build_string_output(l_params,l_polynomial);
     //save metadata
-    save_string(output_name+".dlb.json", "{ \"time\":"+std::to_string(time_to_complete)+" }");
+    save_string(output_name+".dlb.json", "{ \"time\":"+std::to_string((long double)time_to_complete)+" }");
     //save...
     tga::save_matrix(output_name+".dlb.tga", g_matrix);
     //success
