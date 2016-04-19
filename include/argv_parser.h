@@ -220,7 +220,7 @@ inline std::string get_help(const argv_parameters& params)
     "\t--mxn/-m  <width> <height>      matrix resolution                   %s\n"
     "\t--qxp/-q  <width> <height>      matrix subdivision                  %s\n"
     "\t--zoom/-z <zoom factor>         zoom factor into center area        %s\n"
-    "\t--zoom/-z <split factor>        subdivision factor                  %s\n";
+    "\t--factor/-f <split factor>      subdivision factor                  %s\n";
     
     char c_str_out_options [sizeof(c_str_options)*2];
     std::sprintf(c_str_out_options,
