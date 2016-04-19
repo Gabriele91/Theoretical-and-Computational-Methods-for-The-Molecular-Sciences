@@ -37,7 +37,7 @@ using kernel_t     = kernel< value_t >;
 //mpi types
 namespace mpi   = mpi_interface;
 namespace info  = mpi::mpi_info;
-//word
+//world
 auto&     world = mpi::mpi_world;
 //type tag
 enum tag

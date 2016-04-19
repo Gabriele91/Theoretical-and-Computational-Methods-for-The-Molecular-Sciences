@@ -40,6 +40,18 @@ int main(int argc,const char* argv[])
     using vector_rgb_t = color::vector_rgb< value_t >;
     using praser_t     = parser< value_t >;
     using kernel_t     = kernel< value_t >;
+    //mpi types
+    namespace mpi   = mpi_interface;
+    namespace info  = mpi::mpi_info;
+    //world
+    auto&     world = mpi::mpi_world;    //init mpi
+    mpi::init();
+    //if not
+    if(!world.get_rank())
+    {
+        mpi::finalize();
+        return 0;
+    }
     //alloc input parameters
     argv_parameters parameters;
     //parse args
@@ -103,6 +115,8 @@ int main(int argc,const char* argv[])
     save_string(output_name+".serial.json", "{ \"time\":"+std::to_string((long double)time_to_complete)+" }");
     //save...
     tga::save_matrix(output_name+".serial.tga", matrix);
+    //end of MPI
+    mpi::finalize();
     //return
     return 0;
 }
