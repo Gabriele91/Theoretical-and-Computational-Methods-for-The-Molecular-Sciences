@@ -40,6 +40,7 @@ class Compile(Process):
 
 
 def main():
+    os.system('clear')
     bar = ["▌", "▀", "▐", "▄"]
     proc_pass = 0
     #result
