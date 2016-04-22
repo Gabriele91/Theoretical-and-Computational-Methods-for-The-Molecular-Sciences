@@ -6,7 +6,7 @@ from time import sleep
 import os
 import subprocess
 import ConfigParser
-
+import sys
 BIN_DIR = os.path.join(os.getenv("HOME"), 'bin')
 CONFIG = ConfigParser.ConfigParser()
 CONFIG.read(os.path.join(BIN_DIR, 'sub.cfg'))
@@ -31,22 +31,32 @@ def call_command(command):
 
 class Compile(Process):
 
-    def __init__(self,result):
+    def __init__(self,result,flag):
         super(Compile, self).__init__()
         self.result = result
+        self.flag = flag
 
     def run(self):
-        self.result.put(call_command(os.path.join(SOURCES,"intel_build.sh")))
+        self.result.put(call_command(os.path.join(SOURCES,"intel_build.sh")+" "+self.flag))
 
+def print_output(ret):
+    if ret[1] != 0:
+        print(Colors.FAIL + "------- FAIL TO COMPILE -------" + Colors.ENDC )
+    if len(ret[3]) != 0:
+        print(Colors.WARNING + "------- OUPUT ERROR -------" + Colors.ENDC )
+        print(ret[2])
+        print(ret[3])
+    if len(ret[2]) != 0:
+        print(Colors.OKGREEN + "------- SUCCESS TO COMPILER -------" + Colors.ENDC )
 
-def main():
+def compile(flag):
     os.system('clear')
     bar = ["▌", "▀", "▐", "▄"]
     proc_pass = 0
     #result
     ret_q = Queue()
     #parallel compile
-    process = Compile(ret_q)
+    process = Compile(ret_q,flag)
     process.start()
     #wait...
     while process.is_alive():
@@ -57,18 +67,49 @@ def main():
         sleep(0.002)
     process.join()
     #get first element
-    ret = ret_q.get()
+    return ret_q.get()
 
-    if ret[1] != 0:
-        print(Colors.FAIL + "------- FAIL TO COMPILE -------" + Colors.ENDC )
-    if len(ret[3]) != 0:
-        print(Colors.WARNING + "------- OUPUT ERROR -------" + Colors.ENDC )
-        print(ret[2])
-        print(ret[3])
-    if len(ret[2]) != 0:
-        print(Colors.OKGREEN + "------- SUCCESS TO COMPILER -------" + Colors.ENDC )
+def main():
+    COMPILE_FLAGS       = 0
+    COMPILE_FLOAT       = 1
+    COMPILE_DOUBLE      = 2
+    COMPILE_LONG_DOUBLE = 4
+    COMPILE_CLEAN       = 8
+    argv = sys.argv[2:]
+    if len(argv):    
+        for arg in argv:
+            if arg.upper() == "DOUBLE":
+                COMPILE_FLAGS |= COMPILE_DOUBLE
+            elif arg.upper() == "FLOAT":
+                COMPILE_FLAGS |= COMPILE_FLOAT
+            elif arg.upper() == "LONG_DOUBLE" or arg.upper() == "LONG-DOUBLE":
+                COMPILE_FLAGS |= COMPILE_LONG_DOUBLE
+            elif arg.upper() == "CLEAN":
+                COMPILE_FLAGS |= COMPILE_CLEAN
+            elif arg.upper() == "ALL":
+                COMPILE_FLAGS |= COMPILE_FLOAT | COMPILE_DOUBLE | COMPILE_LONG_DOUBLE 
+            else:
+                print("Unknow command: "+arg)
+                exit(-1)
+    else:
+        COMPILE_FLAGS = COMPILE_FLOAT | COMPILE_DOUBLE | COMPILE_LONG_DOUBLE | COMPILE_CLEAN
+    #save all return
+    returns = {}
+    #compile
+    if COMPILE_FLAGS & COMPILE_FLOAT:
+        returns[COMPILE_FLOAT] = compile("FLOAT")
+    if COMPILE_FLAGS & COMPILE_DOUBLE:
+        returns[COMPILE_DOUBLE] = compile("DOUBLE")
+    if COMPILE_FLAGS & COMPILE_LONG_DOUBLE:
+        returns[COMPILE_LONG_DOUBLE] = compile("LONG_DOUBLE")
+    
+    for key in returns:
+        if key & COMPILE_FLOAT: print(Colors.OKBLUE+ "------- FLOAT COMPILING OUTPUT -------" +Colors.ENDC)
+        if key & COMPILE_DOUBLE: print(Colors.OKBLUE+ "------- DOUBLE COMPILING OUTPUT -------" +Colors.ENDC)
+        if key & COMPILE_LONG_DOUBLE: print(Colors.OKBLUE+ "------- LONG DOUBLE COMPILING OUTPUT -------" +Colors.ENDC)
+        print_output(returns[key])
 
-    ret = call_command("cd "+SOURCES+" && make clean")
+    ret = call_command("cd "+SOURCES+ (" && make clean" if COMPILE_FLAGS & COMPILE_CLEAN else ""))
 
 
 if __name__ == '__main__':
