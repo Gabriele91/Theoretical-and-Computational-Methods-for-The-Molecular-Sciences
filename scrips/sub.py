@@ -52,7 +52,7 @@ def call_command(command):
 
 class Submit(Process):
 
-    def __init__(self, exec_name, num_nodes, num_processes, output_dir, input_args):
+    def __init__(self, title, exec_name, num_nodes, num_processes, output_dir, input_args):
         super(Submit, self).__init__()
         self.exec_name = exec_name
         self.job_name = self.exec_name.replace("/", "_")
@@ -61,10 +61,11 @@ class Submit(Process):
         self.num_processes = num_processes
         self.output_dir = output_dir
         self.input_args = input_args
+        self.title = title
         self.cpu_time_used = ''
 
     def run(self):
-        print(Colors.OKGREEN + "----- Start submit -----" + Colors.ENDC)
+        print(Colors.OKGREEN + "----- Start submit -> %s -----" % self.title + Colors.ENDC)
         # ----- MAKE SUBMIT -----
         print(
             Colors.WARNING + "- Make submit command" + Colors.ENDC, end=" -> ")
@@ -221,10 +222,12 @@ def main():
                         default=1)
     parser.add_argument('-o', '--output', metavar='outDir', type=str,
                         help='output directory', default="output/")
+    parser.add_argument('-t', '--title', metavar='title', type=str,
+                        help='title submit', default="")
 
     args = parser.parse_args()
 
-    proc = Submit(args.execName, args.nodes, args.processes, args.output, args.input_args)
+    proc = Submit(args.title, args.execName, args.nodes, args.processes, args.output, args.input_args)
     os.system('clear')
     proc.run()
     if proc.is_alive():
