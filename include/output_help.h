@@ -24,7 +24,7 @@ inline std::string build_string_output(const argv_parameters& l_params,
     output+= "x";
     output+= std::to_string((unsigned long long)l_params.m_iteration);
     output+= "x";
-    output+= std::to_string((unsigned long long)l_params.m_factor);
+    output+= std::to_string((long double)l_params.m_factor);
     output+= "x";
     output+= std::to_string((long double)l_params.m_zoom);
     output+= ".";

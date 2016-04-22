@@ -50,15 +50,6 @@ def build_test_cmp(type_app,precision, factor, kernel,test):
                              test["iteration"],
                              test["zoom"] )
 
-def call_command(command):
-    proc = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    out, err = proc.communicate()
-    return command, proc.returncode, out, err
-
-def back_call_command(command):
-    return call_command("cd .. && "+command)
-
 def main():
     os.system("cd .. && mkdir -p output")
     os.system("cd .. && mkdir -p output/float")
@@ -76,7 +67,8 @@ def main():
                 else:
                     test_to_do.append(build_test_cmp(type_app,precision,1.0,'newton', test))
     for value in test_to_do:
-        os.system("cd .. && "+value)
+        if os.system("cd .. && "+value) == 2:
+          exit(2)
 
 if __name__ == '__main__':
     main()
